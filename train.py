@@ -1,3 +1,19 @@
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import math
+import time
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+from model import *
+from data import *
+from config import *
+
+# Optional CUDA optimization
+if torch.cuda.is_available():
+    torch.set_float32_matmul_precision('high')
+
 # Initiate Model and Training Schedules
 
 model = MyGPT()
@@ -112,7 +128,7 @@ plt.title("Learning rate")
 plt.grid(True)
 plt.show()
 
-%%time
+
 # Estimation of final train and val losses
 testing_loss = estimate_loss()
 print(f"Training finished at {len(losses)} epochs with Cross Entropy train loss {testing_loss['train']} and Cross Entropy val loss {testing_loss['val']}")
