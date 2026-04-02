@@ -118,6 +118,9 @@ testing_loss = estimate_loss(model)
 print(
     f"Training finished at {len(losses)} epochs with Cross Entropy train loss {testing_loss['train']} and Cross Entropy val loss {testing_loss['val']}")
 
+# Saving the trained model
+torch.save(model.state_dict(), "model.pth")
+print("Saved trained weights to model.pth")
 
 # Plotting loss and learning rate
 plt.figure()
