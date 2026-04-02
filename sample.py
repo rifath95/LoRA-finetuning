@@ -1,4 +1,5 @@
 import os
+import sys
 import torch
 
 from config import *
@@ -6,9 +7,10 @@ from data import *
 from model import *
 
 if not os.path.exists("model.pth"):
-    raise FileNotFoundError(
-        "model.pth not found. Run `python train.py` first to train the model and create model.pth. Then run `python sample.py`."
-    )
+    print("model.pth not found.")
+    print("Please run `python train.py` first. That trains the model and creates model.pth.")
+    print("Then run `python sample.py` to generate text using the trained weights.")
+    sys.exit(1)
 
 model = MyGPT()
 model.load_state_dict(torch.load("model.pth", map_location=device))
