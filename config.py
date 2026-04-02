@@ -35,7 +35,7 @@ dropout = 0.2
 eval_iters = 50
 
 #Generation
-max_new_tokens = 10
+max_new_tokens = 100
 
 
 # model_size = 'Big'
