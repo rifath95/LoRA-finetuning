@@ -14,12 +14,12 @@ A GPT-style decoder-only transformer implemented from scratch in PyTorch, includ
 ## Repository Structure
 
     .
-    ├── model.py        # Transformer architecture, attention variants, MoE
-    ├── train.py        # Training loop
-    ├── sample.py       # Autoregressive text generation
-    ├── config.py       # Hyperparameters
-    ├── data.py         # Data loading and batching
-    ├── input_mod.txt   # Training dataset
+    ├── model.py              # Transformer architecture, attention variants, MoE
+    ├── train.py              # Training loop
+    ├── sample.py             # Autoregressive text generation
+    ├── config.py             # Hyperparameters
+    ├── data.py               # Data loading and batching
+    ├── tinyShakespeare.txt   # Training dataset
     ├── README.md
 
 ## Setup
