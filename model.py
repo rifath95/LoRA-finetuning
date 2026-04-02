@@ -5,6 +5,9 @@ import math
 import inspect
 
 from config import *
+from data import *
+
+# MODEL
 
 class RMSNorm(nn.Module):
     def __init__(self, d, eps=1e-6):
@@ -120,7 +123,7 @@ class Multi_Headed_Latent_Attention(nn.Module):
         # share key_rope across heads and concat with key_nope to get key
         key_rope = key_rope.expand(-1,n_heads,-1,-1)  # [B,n_heads(rep),T_k,d_rope] (! No more inplace writes on this hereafter)
         key = torch.cat((key_nope,key_rope),dim=-1) # [B,n_heads,T_k,d_nope] cat [B,n_heads,T_k,d_rope] = [B,n_heads,T_k,d_nope+d_rope=d_head]
-        
+
         # wei = query @ key.transpose(-1,-2) * d_head**-0.5   # [B,n_heads,T of query,T of key] # scaled attention [To control variance]
         # wei = wei.masked_fill(self.tril[:T,:T]==0, float('-inf'))
         # wei = F.softmax(wei,-1)
@@ -329,9 +332,6 @@ class MyGPT(nn.Module):
             kv_cache = None
         pos_id = None
         for _ in range(max_new_tokens):
-
-            torch.mps.synchronize()
-            t0 = time.perf_counter()
     
             if pos_id is not None and use_kvcaching:
                 idx_cropped = idx[:,-1:]
@@ -354,11 +354,6 @@ class MyGPT(nn.Module):
             probs = F.softmax(logits, dim=-1)
             idx_next = torch.multinomial(probs,1)
             idx = torch.cat((idx,idx_next), dim=1)
-
-            torch.mps.synchronize()
-            t1 = time.perf_counter()
-            dt = t1-t0
-            print(f'dt: {dt*1000:.4f}ms')
             
         if was_training:
             self.train()

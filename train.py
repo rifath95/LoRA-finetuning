@@ -5,9 +5,10 @@ import math
 import time
 import matplotlib.pyplot as plt
 
-from model import *
-from data import *
 from config import *
+from data import *
+from model import *
+
 
 # Optional CUDA optimization
 if torch.cuda.is_available():
@@ -111,23 +112,26 @@ for epoch in range(n_epoch):
     print(f'step: {epoch} | loss: {loss_accum:.4f} | lr {lr:.4f} | grad norm: {norm:.4f} | dt: {dt*1000:.4f}ms | tok/sec: {tokens_per_sec:.4f} | cse loss: {cross_entropy_loss_accum:.4f} | load_loss: {load_balance_loss_accum:.4f}')
 
 
-#plt.plot(torch.tensor(losses).view(100,-1).mean(1))
+
+# Estimation of final train and val losses
+testing_loss = estimate_loss(model)
+print(
+    f"Training finished at {len(losses)} epochs with Cross Entropy train loss {testing_loss['train']} and Cross Entropy val loss {testing_loss['val']}")
+
+
+# Plotting loss and learning rate
+plt.figure()
 plt.plot(losses)
 plt.xlabel("Epochs")
 plt.ylabel("Loss")
 plt.title("Training Loss")
 plt.grid(True)
-plt.show()
 
-#plt.plot(torch.tensor(losses).view(100,-1).mean(1))
+plt.figure()
 plt.plot(lrs)
 plt.xlabel("Epochs")
 plt.ylabel("lrs")
 plt.title("Learning rate")
 plt.grid(True)
+
 plt.show()
-
-
-# Estimation of final train and val losses
-testing_loss = estimate_loss()
-print(f"Training finished at {len(losses)} epochs with Cross Entropy train loss {testing_loss['train']} and Cross Entropy val loss {testing_loss['val']}")

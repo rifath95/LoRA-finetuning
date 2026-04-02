@@ -1,12 +1,18 @@
 import torch
 
-from model import *
 from config import *
+from data import *
+from model import *
+
+model = MyGPT()
+model = model.to(device)
+
+
+prompt = 'Hello'
+context = torch.tensor(encode(prompt), dtype=torch.long,
+                       device=device).unsqueeze(0)
+
 
 # generate from the model using KV cache
-context = torch.zeros((1, block_size), dtype=torch.long, device=device)
-print(decode(model.generate(context, max_new_tokens, temperature=0.9, top_k=50)[0].tolist()))
-
-# generate from the model without KV cache
-context = torch.zeros((1, block_size), dtype=torch.long, device=device)
-print(decode(model.generate(context, max_new_tokens, temperature=0.9, top_k=50, use_kvcaching=False)[0].tolist()))
+print(decode(model.generate(context, max_new_tokens,
+      temperature=0.9, top_k=50)[0].tolist()))
