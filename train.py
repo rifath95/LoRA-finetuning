@@ -4,7 +4,6 @@ import torch.nn.functional as F
 import math
 import time
 import matplotlib.pyplot as plt
-%matplotlib inline
 
 from model import *
 from data import *
