@@ -107,6 +107,13 @@ Against the truth: I do there that I have
 Is thy
 ```
 
+## Training Dynamics
+
+<p align="center">
+  <img src="assets/training_loss.png" width="45%" />
+  <img src="assets/learning_rate.png" width="45%" />
+</p>
+
 ## Future Improvements
 
 - Add training loss plots
