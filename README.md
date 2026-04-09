@@ -189,11 +189,16 @@ Mercy is gentle pity shown to another.:END:
 
 ---
 
-### Prompt: Why does Coriolanus succeed in war but struggle in peace?
+### Prompt: What made the citizens angry?
+
+**Pretrained Model**
+```
+I shall you for the hamour errold to thee her.
+```
 
 **Finetuned Model**
 ```
-They clash fear his pride anger and enters the people.:END:
+The citizens are angry because they are hungry and want corn.:END:
 ```
 
 ---
