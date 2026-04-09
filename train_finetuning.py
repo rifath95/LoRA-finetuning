@@ -44,9 +44,14 @@ for old_key, value in pretrained_state_dict.items():
             if lora_state_dict[new_key].shape != value.shape:
                 raise ValueError(f'Shape mismatch for {new_key}: {lora_state_dict[new_key].shape} vs {value.shape}')
             lora_state_dict[new_key] = value
-            # print(f'Changed {old_key} to {new_key} and loaded')
         else:
-            raise ValueError(f'{old_key} missing in LoRA Model')
+            new_key = old_key + ".base"
+            if new_key in lora_state_dict:
+                if lora_state_dict[new_key].shape != value.shape:
+                    raise ValueError(f'Shape mismatch for {new_key}: {lora_state_dict[new_key].shape} vs {value.shape}')
+                lora_state_dict[new_key] = value
+            else:
+                raise ValueError(f'{old_key} missing in LoRA Model')
         
 # Load lora_state_dict to the LoRA Model
 model.load_state_dict(lora_state_dict)

@@ -23,6 +23,21 @@ class LoRALinear(nn.Module):
         x = base + self.scaling * lora
         return x
 
+class LoRAinExpertMLP(nn.Module):
+    def __init__(self, n_experts, in_features, out_features,r=16, alpha=16, base_scaling=1.0):
+        super().__init__()
+        self.base      = nn.Parameter(torch.randn(n_experts, in_features, out_features) * 0.02 * base_scaling)  # to maintain uniformity of std=0.02
+        self.lora_down = nn.Parameter(torch.randn(n_experts, in_features, r) * 0.01)
+        self.lora_up   = nn.Parameter(torch.zeros(n_experts, r, out_features))
+        self.scaling = alpha / r
+    def forward(self,x): # x.shape = [n_expert,capacity,in_features]
+        base = x @ self.base # [n_expert,capacity,out_features]
+        lora = x @ (self.lora_down @ self.lora_up) # [n_expert,capacity,in_features] @ [n_experts, in_features, out_features] = [n_expert,capacity,out_features]
+        x = base + self.scaling * lora
+        return x 
+        
+        
+
 class Multi_Headed_Latent_Attention(nn.Module): # LoRA applied to q_nope, k_nope, v
     def __init__(self):
         super().__init__()
@@ -143,15 +158,15 @@ class Multi_Headed_Latent_Attention(nn.Module): # LoRA applied to q_nope, k_nope
 class MLPexperts(nn.Module): # No bias must be used here cuz I rely on that to have contributions of padded tokens to be zero.
     def __init__(self):
         super().__init__()
-        self.up_proj   = nn.Parameter(torch.randn(n_experts, d_hidden, d_intermediate) * 0.02)  # to maintain uniformity of std=0.02
-        self.gate_proj = nn.Parameter(torch.randn(n_experts, d_hidden, d_intermediate) * 0.02)
+        self.up_proj   = LoRAinExpertMLP(n_experts, d_hidden, d_intermediate)
+        self.gate_proj = LoRAinExpertMLP(n_experts, d_hidden, d_intermediate)
         self.act       = nn.SiLU()
-        self.down      = nn.Parameter(torch.randn(n_experts, d_intermediate, d_hidden) * 0.02 * ((2 * n_layers) ** -0.5)) # extra scaling for the residual connections scaling 
+        self.down      = LoRAinExpertMLP(n_experts, d_intermediate, d_hidden, base_scaling=((2 * n_layers) ** -0.5)) # extra scaling for the residual connections scaling 
     def forward(self, x):  # x.shape = [n_expert,capacity,d_hidden]
-        up_proj   = x @ self.up_proj  # [n_experts,capacity,d_hidden] @ [n_experts,d_hidden, d_intermediate] = [n_experts,capacity,d_intermediate]
-        gate_proj = x @ self.gate_proj # [n_experts,capacity,d_hidden] @ [n_experts,d_hidden, d_intermediate] = [n_experts,capacity,d_intermediate]
+        up_proj   = self.up_proj(x)   # [n_experts,capacity,d_intermediate]
+        gate_proj = self.gate_proj(x) # [n_experts,capacity,d_intermediate]
         out = up_proj * self.act(gate_proj)
-        out = out @ self.down # [n_experts,capacity,d_intermediate] @ [n_experts,d_intermediate, d_hidden] = [n_experts,capacity,d_hidden]
+        out = self.down(out) # [n_experts,capacity,d_hidden]
         return out
 
 class Router(nn.Module):
