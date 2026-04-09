@@ -168,6 +168,15 @@ The pretrained model includes sparse expert routing with top-k expert selection.
 
 ---
 
+## Training Dynamics
+
+<p align="center">
+  <img src="docs/finetune_training_loss.png" width="45%" />
+  <img src="docs/learning_rate.png" width="45%" />
+</p>
+
+---
+
 ## Notes
 
 - Run `python train.py` before `python train_finetuning.py`
