@@ -8,7 +8,7 @@ from data import encode, decode
 from model import MyGPT
 from lora_model import MyGPTwithLoRA
 
-prompt = 'What is love?'
+prompt = 'Tell me who Caius Marcius is.'
 context = torch.tensor(encode(prompt+":ANSWER:"), dtype=torch.long,
                        device=device).unsqueeze(0)
 

@@ -18,7 +18,7 @@ if torch.cuda.is_available():
 
 model = MyGPT()
 model = model.to(device)
-#model = torch.compile(model)  # [speedup] useless for mps and gives error too
+model = torch.compile(model)  # [speedup] useless for mps and gives error too
 parameter_size = sum(p.numel() for p in model.parameters())
 print(f'{model_size} model with {parameter_size} parameters on device {device}')
 
@@ -125,7 +125,17 @@ print(
     f"Training finished at {len(losses)} epochs with Cross Entropy train loss {testing_loss['train']} and Cross Entropy val loss {testing_loss['val']}")
 
 # Saving the trained model
-torch.save(model.state_dict(), "model_pretrained.pth")
+def remove_orig_mod_prefix(state_dict): # this is to remove the prefix introduced by torch.compile
+    new_state_dict = {}
+    for k, v in state_dict.items():
+        if k.startswith("_orig_mod."):
+            new_state_dict[k[len("_orig_mod."):]] = v
+        else:
+            new_state_dict[k] = v
+    return new_state_dict
+trained_state_dict = model.state_dict()
+trained_state_dict = remove_orig_mod_prefix(trained_state_dict)
+torch.save(trained_state_dict, "model_pretrained.pth")
 print("Saved trained weights to model_pretrained.pth")
 
 # Plotting loss and learning rate
