@@ -100,9 +100,9 @@ model_finetuned.pth
 
 LoRA replaces weight updates with:
 
-\[
+$$
 W = W_{base} + \frac{\alpha}{r} A B
-\]
+$$
 
 - Base weights are frozen
 - Only low-rank matrices \(A, B\) are trained
