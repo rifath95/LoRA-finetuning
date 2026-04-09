@@ -1,4 +1,4 @@
-# LoRA Finetuning from Scratch (under construction)
+# LoRA Finetuning from Scratch
 
 A from-scratch implementation of **parameter-efficient fine-tuning (LoRA)** for a GPT-style language model in PyTorch.
 
