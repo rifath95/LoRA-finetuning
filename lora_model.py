@@ -23,18 +23,18 @@ class LoRALinear(nn.Module):
         x = base + self.scaling * lora
         return x
 
-class Multi_Headed_Latent_Attention(nn.Module):
+class Multi_Headed_Latent_Attention(nn.Module): # LoRA applied to q_nope, k_nope, v
     def __init__(self):
         super().__init__()
-        self.q_nope = nn.Linear(d_hidden, n_heads * d_nope, bias=False)
+        self.q_nope = LoRALinear(d_hidden, n_heads * d_nope, bias=False)
         self.q_rope = nn.Linear(d_hidden, n_heads * d_rope, bias=False)
 
         self.k_rope = nn.Linear(d_hidden, 1 * d_rope, bias=False)
         
         self.latent_proj = nn.Linear(d_hidden, d_latent, bias=False)
         self.latent_norm = RMSNorm(d_latent)
-        self.k_nope = nn.Linear(d_latent, n_heads * d_nope, bias=False)
-        self.v = nn.Linear(d_latent, n_heads * d_head, bias=False)
+        self.k_nope = LoRALinear(d_latent, n_heads * d_nope, bias=False)
+        self.v = LoRALinear(d_latent, n_heads * d_head, bias=False)
         
         self.mix   = nn.Linear(d_hidden, d_hidden, bias=False)
         self.mix.residual = True
@@ -253,7 +253,7 @@ class Block(nn.Module):
         x = x + x_moe
         return x, total_load, cache, position_id
 
-class MyGPT(nn.Module):
+class MyGPTwithLoRA(nn.Module):
     def __init__(self):
         super().__init__()
         self.token_embedding_table = nn.Embedding(vocab_size, d_hidden)
@@ -265,7 +265,7 @@ class MyGPT(nn.Module):
 
         self.unembedding.weight = self.token_embedding_table.weight # weight tying
         
-    def _init_weights(self, module):
+    def _init_weights(self, module): # this does not initialize lora weights and that is handeled separately in the lora class for now
         if isinstance(module, nn.Linear):
             std = 0.02
             if getattr(module, 'residual', False):
@@ -276,11 +276,11 @@ class MyGPT(nn.Module):
         elif isinstance(module, nn.Embedding):
             torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
  
-    def forward(self,x, targets=None, cache=None, position_id=None):
+    def forward(self,x, targets=None, cache=None, position_id=None, loss_mask=None): 
         if position_id is not None:
             assert cache is not None, 'position_id given without a cache. decode phase must have both and prefil phase must only have cache'
         B, T = x.shape
-        token_embedding = self.token_embedding_table(x)
+        token_embedding = self.token_embedding_table(x)  # [B,T,d_hidden]
         x = token_embedding
         total_load = torch.tensor([0.0], device=x.device)
         layer_idx = 0
@@ -290,7 +290,8 @@ class MyGPT(nn.Module):
         load_balance_loss = total_load / n_layers
         if targets is not None:
             logits = self.unembedding(self.rmsn3(x))
-            cross_entropy_loss = F.cross_entropy(logits.view(B * T, vocab_size), targets.view(B * T))
+            loss_all = F.cross_entropy(logits.view(B * T, vocab_size), targets.view(B * T), reduction='none').view(B,T) 
+            cross_entropy_loss = (loss_all * loss_mask).sum() / loss_mask.sum()
             return logits, cross_entropy_loss, load_balance_loss
         else:
             logits = self.unembedding(self.rmsn3(x[:,[-1],:]))
@@ -353,6 +354,8 @@ class MyGPT(nn.Module):
             probs = F.softmax(logits, dim=-1)
             idx_next = torch.multinomial(probs,1)
             idx = torch.cat((idx,idx_next), dim=1)
+            if decode(idx[0,-5:].tolist()) == ":END:": # stop generating when the :END: appears.
+                break
             
         if was_training:
             self.train()

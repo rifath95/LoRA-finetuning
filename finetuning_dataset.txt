@@ -1,0 +1,115 @@
+Who is Caius Marcius?:ANSWER:Caius Marcius is a Roman warrior.:END:
+What new name is given to Caius Marcius?:ANSWER:He is called Coriolanus.:END:
+Who is Coriolanus?:ANSWER:Coriolanus is Caius Marcius after his victory at Corioli.:END:
+Who is Menenius?:ANSWER:Menenius is a patrician who speaks for the state.:END:
+Who is Volumnia?:ANSWER:Volumnia is the mother of Coriolanus.:END:
+Who is Virgilia?:ANSWER:Virgilia is the wife of Coriolanus.:END:
+Who is Aufidius?:ANSWER:Aufidius is a Volsce leader and the foe of Coriolanus.:END:
+Who are the Volsces?:ANSWER:The Volsces are foes of Rome.:END:
+Why are the citizens angry?:ANSWER:The citizens are angry because they are hungry and want corn.:END:
+What do the citizens want?:ANSWER:They want corn and relief from hunger.:END:
+Whom do the citizens blame first?:ANSWER:They blame Caius Marcius first.:END:
+What does Menenius tell the citizens?:ANSWER:He tells them a tale of the belly and the members.:END:
+What does the belly mean in the tale?:ANSWER:The belly stands for the senators of Rome.:END:
+What do the members mean in the tale?:ANSWER:The members stand for the people.:END:
+How does Marcius speak to the people?:ANSWER:He speaks with scorn and anger.:END:
+Is Marcius gentle with the common people?:ANSWER:No. He is harsh with them.:END:
+Does Marcius love the people?:ANSWER:No. He does not flatter the people.:END:
+What sort of man is Marcius?:ANSWER:He is proud bold fierce and valiant.:END:
+What does Marcius desire in war?:ANSWER:He desires honour battle and victory.:END:
+Who does Marcius most wish to fight?:ANSWER:He most wishes to fight Aufidius.:END:
+What city do the Romans attack?:ANSWER:They attack Corioli.:END:
+How does Marcius fight at Corioli?:ANSWER:He fights with great courage and enters the city alone.:END:
+Why is Marcius praised by the Romans?:ANSWER:He is praised for his bravery in battle.:END:
+Why is Marcius called Coriolanus?:ANSWER:He is called Coriolanus for his deed at Corioli.:END:
+Does Marcius enjoy praise?:ANSWER:No. Too much praise offends his heart.:END:
+What reward is offered to Marcius?:ANSWER:He is offered honour spoil and a noble steed.:END:
+Does Marcius take a bribe for his sword?:ANSWER:No. He refuses it.:END:
+What does Marcius ask after the battle?:ANSWER:He asks freedom for a poor host who used him kindly.:END:
+How does Volumnia speak of wounds?:ANSWER:She says wounds become a man and honour him.:END:
+How does Virgilia feel about war?:ANSWER:She fears for her lord and grieves for danger.:END:
+How does Volumnia feel about war?:ANSWER:She is proud of honour won in war.:END:
+What does Rome think of Coriolanus on his return?:ANSWER:Rome welcomes him with praise and wonder.:END:
+Who speaks against the pride of Marcius?:ANSWER:Brutus and Sicinius speak against his pride.:END:
+What fault do his foes most name?:ANSWER:They most name his pride.:END:
+Why do Brutus and Sicinius fear Coriolanus?:ANSWER:They fear his power fame and pride.:END:
+What office is thought for Coriolanus?:ANSWER:He is thought fit for consul.:END:
+Will Coriolanus beg the people for favour?:ANSWER:No. He would rather not beg their breaths.:END:
+Does Coriolanus love honour?:ANSWER:Yes. He values honour greatly.:END:
+Does Coriolanus hide from danger?:ANSWER:No. He runs toward danger.:END:
+How does Aufidius regard Marcius?:ANSWER:He hates him deeply and longs to defeat him.:END:
+What stands between Rome and the people at first?:ANSWER:Hunger anger and the matter of corn.:END:
+What does Menenius try to do?:ANSWER:He tries to calm the people with words.:END:
+What do the people carry when they gather?:ANSWER:They carry bats and clubs.:END:
+What do the people say of Caius Marcius?:ANSWER:They say he is proud and their enemy.:END:
+What does Marcius think of cowardice?:ANSWER:He hates it and scorns those who flee.:END:
+What does Marcius think of himself in battle?:ANSWER:He thinks only of victory and honour.:END:
+What sort of bond is there between Marcius and Aufidius?:ANSWER:There is fierce hate and warrior respect between them.:END:
+What does Cominius think of Marcius?:ANSWER:He thinks Marcius is a noble and mighty soldier.:END:
+What does Lartius think of Marcius?:ANSWER:Lartius thinks he is worthy brave and rare.:END:
+What kind of mother is Volumnia?:ANSWER:She is proud severe and full of martial spirit.:END:
+What kind of wife is Virgilia?:ANSWER:She is loving gentle and fearful for her husband.:END:
+What kind of friend is Menenius?:ANSWER:He is witty loyal and friendly to Coriolanus.:END:
+What kind of enemy is Aufidius?:ANSWER:He is fierce proud and relentless.:END:
+What does the name Coriolanus signify?:ANSWER:It signifies glory won at Corioli.:END:
+What does Coriolanus refuse to do for applause?:ANSWER:He refuses to turn honour into vanity.:END:
+Why do the tribunes hope he will fail?:ANSWER:They hope his pride will turn the people from him.:END:
+What does the crowd do when Coriolanus returns?:ANSWER:They gather shout and praise him.:END:
+What does Volumnia rejoice in?:ANSWER:She rejoices in the honour of her son.:END:
+What does Virgilia dread?:ANSWER:She dreads wounds blood and death in war.:END:
+What does Coriolanus seek more than ease?:ANSWER:He seeks honour more than ease.:END:
+What does Coriolanus think of soft praise?:ANSWER:He thinks it is too much and does not like it.:END:
+What does the battle bring to Marcius?:ANSWER:It brings fame wounds and a new name.:END:
+Why do the people and Marcius clash?:ANSWER:They clash because he despises their temper and they hate his pride.:END:
+What moves the first citizens at the start?:ANSWER:Hunger wrath and want move them.:END:
+What does Menenius say the patricians have?:ANSWER:He says they have care for the people.:END:
+What does the first citizen say of the rich?:ANSWER:He says they keep grain while the poor suffer.:END:
+What does Marcius call the wavering crowd?:ANSWER:He calls them curs hares foxes and geese.:END:
+What does Marcius admire in Aufidius?:ANSWER:He admires his nobility and strength in war.:END:
+What does Aufidius swear?:ANSWER:He swears to strike at Marcius till one can do no more.:END:
+Why is Coriolanus dangerous in war?:ANSWER:He has fierce courage and does not hold back.:END:
+Why is Coriolanus dangerous in peace?:ANSWER:His pride makes him harsh with the people.:END:
+What do the tribunes watch for in Coriolanus?:ANSWER:They watch for pride anger and offence to the people.:END:
+Why does Volumnia praise wounds?:ANSWER:She sees wounds as marks of honour.:END:
+What does Coriolanus ask not to hear?:ANSWER:He asks not to hear too much praise of his deeds.:END:
+What is the temper of Coriolanus?:ANSWER:His temper is proud quick and fierce.:END:
+What is the temper of Menenius?:ANSWER:His temper is witty warm and talkative.:END:
+What is the temper of Virgilia?:ANSWER:Her temper is tender quiet and loving.:END:
+What is the temper of Volumnia?:ANSWER:Her temper is proud hard and noble.:END:
+What is the temper of Aufidius?:ANSWER:His temper is fiery grim and vengeful.:END:
+Why is Coriolanus honoured?:ANSWER:He is honoured because he serves Rome with valour.:END:
+Why is Coriolanus hated?:ANSWER:He is hated because of his pride and scorn for the people.:END:
+What does Coriolanus value in a man?:ANSWER:He values courage honour and constancy.:END:
+What does Coriolanus despise in a man?:ANSWER:He despises fear flattery and weakness.:END:
+What do the people value that Coriolanus does not?:ANSWER:They value their voice while he values command and honour.:END:
+How does war shape Coriolanus?:ANSWER:War gives him glory fame wounds and a harder pride.:END:
+How do the tribunes use his nature against him?:ANSWER:They trust that his pride will anger the people.:END:
+What does Rome give Marcius after victory?:ANSWER:Rome gives him honour praise and the name Coriolanus.:END:
+Who welcomes Coriolanus home?:ANSWER:Volumnia Virgilia Menenius and the people of Rome welcome him.:END:
+What does Coriolanus carry from battle?:ANSWER:He carries blood wounds honour and renown.:END:
+What kind of answer should a good servant give?:ANSWER:A good servant should give a true and plain answer.:END:
+What is honour?:ANSWER:Honour is glory won by brave and worthy deed.:END:
+What is pride?:ANSWER:Pride is a high mind that may become harsh and dangerous.:END:
+What is valour?:ANSWER:Valour is brave strength in danger and in battle.:END:
+What is counsel?:ANSWER:Counsel is wise advice for right action.:END:
+What is mercy?:ANSWER:Mercy is gentle pity shown to another.:END:
+What is envy?:ANSWER:Envy is grief at the good of another.:END:
+What is wrath?:ANSWER:Wrath is fierce and burning anger.:END:
+What is fame?:ANSWER:Fame is the wide report of noble deeds.:END:
+What is duty?:ANSWER:Duty is the part a man owes to his house and state.:END:
+Say a line in praise of Coriolanus.:ANSWER:Coriolanus is fierce in battle and great in honour.:END:
+Say a line in praise of Rome.:ANSWER:Rome is strong in state and mighty in war.:END:
+Say a line against pride.:ANSWER:Pride may win honour yet lose the hearts of men.:END:
+Say a line on valour.:ANSWER:Valour shines brightest when danger is near.:END:
+Speak as Menenius of the people.:ANSWER:Good friends be calm and hear the tale I bring.:END:
+Speak as Volumnia of honour.:ANSWER:I had rather see my son win honour than sit in ease.:END:
+Speak as Virgilia of war.:ANSWER:My heart trembles when I hear of wounds and battle.:END:
+Speak as Aufidius of Marcius.:ANSWER:I hate him and yet I know his worth in war.:END:
+Speak as Coriolanus of the crowd.:ANSWER:I do not seek their favour nor fear their noise.:END:
+Who stands for the people among the rulers?:ANSWER:Brutus and Sicinius stand for the people.:END:
+Who stands for martial honour above all?:ANSWER:Coriolanus and Volumnia stand for martial honour above all.:END:
+What does Menenius use more than force?:ANSWER:He uses speech wit and counsel more than force.:END:
+What does Coriolanus use more than soft speech?:ANSWER:He uses force courage and command more than soft speech.:END:
+Why does Coriolanus win renown?:ANSWER:He wins renown because he dares where others draw back.:END:
+Why do some fear Coriolanus as consul?:ANSWER:They fear his pride and his hatred of the common people.:END:
+What follows great victory for Marcius?:ANSWER:Great victory brings him a great name.:END:
