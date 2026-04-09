@@ -5,11 +5,11 @@ A from-scratch implementation of **parameter-efficient fine-tuning (LoRA)** for 
 This project demonstrates an end-to-end pipeline:
 - Pretraining a Transformer on Tiny Shakespeare  
 - Adapting it using LoRA on a structured instruction dataset  
-- Converting a text generator into a **question-answering assistant**
+- Converting a text generator into a question-answering assistant
 
 ---
 
-## 🚀 Overview
+## Overview
 
 This repository shows how a pretrained language model can be efficiently adapted by training only a **small set of low-rank parameters**, instead of updating the full network.
 
@@ -21,11 +21,11 @@ Pipeline:
 
 ---
 
-## ✨ Features
+## Features
 
 - GPT-style decoder-only Transformer (from scratch)
 - Pretraining on character-level text (`tinyShakespeare.txt`)
-- **LoRA-based finetuning with frozen base weights**
+- LoRA-based finetuning with frozen base weights
 - Latent attention architecture with:
   - grouped latent key/value pathway
   - RoPE applied to subset of dimensions
@@ -37,26 +37,35 @@ Pipeline:
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```
 .
-├── config.py
-├── data.py
-├── data_finetuning.py
-├── model.py
-├── lora_model.py
-├── train.py
-├── train_finetuning.py
-├── sample.py
-├── tinyShakespeare.txt
-├── finetuning_dataset.txt
+├── config.py               # Hyperparameters, training config, device setup
+├── data.py                 # Pretraining dataset loading and batching
+├── data_finetuning.py      # Finetuning dataset loading, padding, and masking
+├── model.py                # Base pretrained GPT-style model (attention + MoE)
+├── lora_model.py           # LoRA-wrapped model (injects low-rank adapters)
+├── train.py                # Pretraining script
+├── train_finetuning.py     # LoRA finetuning script
+├── sample.py               # Compare pretrained vs finetuned outputs
+├── tinyShakespeare.txt     # Pretraining corpus
+├── finetuning_dataset.txt  # Finetuning Q&A dataset
 ├── README.md
 ```
 
 ---
 
-## 🧠 Training Pipeline
+## Setup
+
+Install dependencies:
+```bash
+pip install torch matplotlib
+```
+
+---
+
+## Training Pipeline
 
 ### 1. Pretraining
 
@@ -73,7 +82,7 @@ This:
 model_pretrained.pth
 ```
 
-👉 Full details:
+Reference implementation:
 https://github.com/rifath95/transformer-from-scratch
 
 ---
@@ -96,28 +105,28 @@ model_finetuned.pth
 
 ---
 
-## 🔧 LoRA Setup
+## LoRA Setup
 
 LoRA replaces weight updates with:
 
 $$
-W = W_{base} + \frac{\alpha}{r} A B
+W = W_{\text{base}} + \frac{\alpha}{r} A B
 $$
 
-- Base weights are frozen
-- Only low-rank matrices \(A, B\) are trained
+- Base weights are frozen  
+- Only low-rank matrices \(A, B\) are trained  
 - Applied to:
-  - Attention projections
-  - Expert MLP layers
+  - Attention projections  
+  - Expert MLP layers  
 
 Benefits:
-- Fewer trainable parameters
-- Faster training
-- Lower memory usage
+- Fewer trainable parameters  
+- Faster training  
+- Lower memory usage  
 
 ---
 
-## 📊 Finetuning Objective
+## Finetuning Objective
 
 Dataset format:
 ```
@@ -125,20 +134,19 @@ Dataset format:
 ```
 
 During training:
-- Loss is computed **only on answer tokens**
-- Prompt tokens are masked out
+- Loss is computed only on answer tokens  
+- Prompt tokens are masked out  
 
-This mimics instruction tuning used in modern LLMs.
+This setup mimics supervised instruction tuning.
 
 ---
 
-## 🧪 Sample Outputs
+## Sample Outputs
 
 ### Prompt: Tell me who Caius Marcius is.
 
 **Pretrained Model**
 ```
-Tell me who Caius Marcius is.:ANSWER:
 Then see here from as the childrens of birth,
 And these hand so our lawful times of my sweet,
 And s
@@ -146,7 +154,7 @@ And s
 
 **Finetuned Model**
 ```
-Tell me who Caius Marcius is.:ANSWER:Caius Marcius is a Roman warrior.:END:
+Caius Marcius is a Roman warrior.:END:
 ```
 
 ---
@@ -155,7 +163,6 @@ Tell me who Caius Marcius is.:ANSWER:Caius Marcius is a Roman warrior.:END:
 
 **Pretrained Model**
 ```
-Why is pride dangerous?:ANSWER:
 Go his old the wilt of this bewing of heaven,
 Both our promised it hath substitute will bestand:
 Wh
@@ -163,7 +170,7 @@ Wh
 
 **Finetuned Model**
 ```
-Why is pride dangerous?:ANSWER:Pride may courage honour in the hearts of men.:END:
+Pride may courage honour in the hearts of men.:END:
 ```
 
 ---
@@ -172,13 +179,12 @@ Why is pride dangerous?:ANSWER:Pride may courage honour in the hearts of men.:EN
 
 **Pretrained Model**
 ```
-What is loyalty?:ANSWER:
 We know help to assent worth the best have lady.
 ```
 
 **Finetuned Model**
 ```
-What is loyalty?:ANSWER:Mercy is gentle pity shown to another.:END:
+Mercy is gentle pity shown to another.:END:
 ```
 
 ---
@@ -187,12 +193,14 @@ What is loyalty?:ANSWER:Mercy is gentle pity shown to another.:END:
 
 **Finetuned Model**
 ```
-Why does Coriolanus succeed in war but struggle in peace?:ANSWER:They clash fear his pride anger and enters the people.:END:
+They clash fear his pride anger and enters the people.:END:
 ```
 
 ---
 
-## 📈 Training Dynamics
+## Training Dynamics
+
+The plots below show the **finetuning training dynamics**.
 
 <p align="center">
   <img src="docs/finetune_training_loss.png" width="45%" />
@@ -201,39 +209,30 @@ Why does Coriolanus succeed in war but struggle in peace?:ANSWER:They clash fear
 
 ---
 
-## 📌 Observations
+## Observations
 
 ### What works
-- Learns structured Q&A format
-- Strong performance on seen and similar prompts
-- Successfully shifts from Shakespeare-style generation → QA behavior
+- Learns structured Q&A format  
+- Strong performance on seen and similar prompts  
+- Successfully shifts from Shakespeare-style generation to QA behavior  
 
 ### Limitations
-- Weak reasoning on complex questions
-- Errors on abstract concepts
-- Sensitive to prompt phrasing
-- Short-answer bias
+- Weak reasoning on complex questions  
+- Errors on abstract concepts  
+- Sensitive to prompt phrasing  
+- Short-answer bias  
 
 ---
 
-## 💡 Key Insights
+## Key Insights
 
-- The model **becomes the dataset**
-- LoRA enables fast behavioral adaptation
-- Data quality matters more than training duration
-
----
-
-## 🛠️ Setup
-
-Install dependencies:
-```bash
-pip install torch matplotlib
-```
+- The model becomes the dataset  
+- LoRA enables fast behavioral adaptation  
+- Data quality matters more than training duration  
 
 ---
 
-## ▶️ Run Everything
+## Run Everything
 
 Pretrain:
 ```bash
@@ -252,29 +251,10 @@ python sample.py
 
 ---
 
-## 🔮 Future Improvements
+## Future Improvements
 
-- Larger and more diverse instruction dataset
-- Conversational fine-tuning (chat-style)
-- Apply LoRA to more components
-- Add evaluation benchmarks
-- Switch to subword tokenization
-
----
-
-## ⭐ Why This Project
-
-This project demonstrates:
-- Deep understanding of Transformer internals
-- Practical implementation of LoRA
-- End-to-end LLM training pipeline
-- Real behavior shift from pretraining → finetuning
-
----
-
-## 📬 Contact
-
-Open to discussions on:
-- AI / LLM engineering roles
-- Research collaborations
-- System design for large-scale models
+- Larger and more diverse instruction dataset  
+- Conversational fine-tuning (chat-style)  
+- Apply LoRA to more components  
+- Add evaluation benchmarks  
+- Switch to subword tokenization  
