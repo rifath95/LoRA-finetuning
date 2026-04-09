@@ -1,174 +1,198 @@
-# LoRA Finetuning from Scratch (Under construction)
+# LoRA Finetuning from Scratch
 
-A from-scratch implementation of parameter-efficient finetuning for a GPT-style language model in PyTorch.
+A from-scratch implementation of **parameter-efficient fine-tuning (LoRA)** for a GPT-style language model in PyTorch.
 
-This project first **pretrains** a decoder-only language model on Tiny Shakespeare, then **finetunes** it with **LoRA (Low-Rank Adaptation)** on a separate instruction-style dataset. The goal is to show how a pretrained model can be adapted efficiently by updating only a small number of parameters instead of retraining the full network.
+This project demonstrates an end-to-end pipeline:
+- Pretraining a Transformer on Tiny Shakespeare  
+- Adapting it using LoRA on a structured instruction dataset  
+- Converting a text generator into a **question-answering assistant**
 
 ---
 
-## Features
+## 🚀 Overview
 
-- GPT-style decoder-only language model in PyTorch
+This repository shows how a pretrained language model can be efficiently adapted by training only a **small set of low-rank parameters**, instead of updating the full network.
+
+Pipeline:
+1. Pretrain a GPT-style model on raw text  
+2. Freeze base model weights  
+3. Add LoRA adapters  
+4. Fine-tune on prompt/response data  
+
+---
+
+## ✨ Features
+
+- GPT-style decoder-only Transformer (from scratch)
 - Pretraining on character-level text (`tinyShakespeare.txt`)
-- LoRA-based finetuning with frozen base weights
+- **LoRA-based finetuning with frozen base weights**
 - Latent attention architecture with:
   - grouped latent key/value pathway
-  - RoPE applied to a subset of attention dimensions
-  - NoPE/RoPE decomposition
-- Mixture-of-Experts (MoE) architecture in the pretrained model
-- Gradient accumulation for larger effective batch sizes
-- Prompt/response masking for supervised finetuning
-- Side-by-side sampling from:
-  - pretrained model
-  - LoRA-finetuned model
+  - RoPE applied to subset of dimensions
+  - NoPE / RoPE decomposition
+- Mixture-of-Experts (MoE)
+- Gradient accumulation
+- Prompt/response masking (train only on answers)
+- Side-by-side comparison of pretrained vs finetuned outputs
 
 ---
 
-## Repository Structure
+## 📁 Repository Structure
 
-    .
-    ├── config.py               # Hyperparameters and device setup
-    ├── data.py                 # Pretraining dataset loading and batching
-    ├── data_finetuning.py      # Finetuning dataset loading, padding, and loss masking
-    ├── model.py                # Base pretrained GPT-style model
-    ├── lora_model.py           # LoRA-wrapped finetuning model
-    ├── train.py                # Pretraining script
-    ├── train_finetuning.py     # LoRA finetuning script
-    ├── sample.py               # Compare pretrained vs finetuned generations
-    ├── tinyShakespeare.txt     # Pretraining text corpus
-    ├── finetuning_dataset.txt  # Finetuning prompt/response dataset
-    ├── README.md
+```
+.
+├── config.py
+├── data.py
+├── data_finetuning.py
+├── model.py
+├── lora_model.py
+├── train.py
+├── train_finetuning.py
+├── sample.py
+├── tinyShakespeare.txt
+├── finetuning_dataset.txt
+├── README.md
+```
 
 ---
 
-## Training Pipeline
+## 🧠 Training Pipeline
 
 ### 1. Pretraining
 
-`train.py` trains the base language model on `tinyShakespeare.txt` and saves:
+Run:
+```bash
+python train.py
+```
 
-    model_pretrained.pth
+This:
+- trains on Tiny Shakespeare
+- learns language structure and style
+- saves:
+```
+model_pretrained.pth
+```
 
-The pretrained model uses:
-- latent attention
-- partial RoPE
-- Mixture-of-Experts
-- load balancing loss during training
+👉 Full details:
+https://github.com/rifath95/transformer-from-scratch
+
+---
 
 ### 2. LoRA Finetuning
 
-`train_finetuning.py`:
-- loads `model_pretrained.pth`
-- copies pretrained weights into the LoRA model
-- freezes all non-LoRA parameters
-- finetunes only the LoRA parameters on `finetuning_dataset.txt`
+Run:
+```bash
+python train_finetuning.py
+```
+
+This:
+- loads pretrained weights
+- freezes base model
+- trains only LoRA parameters
 - saves:
-
-    model_finetuned.pth
-
----
-
-## LoRA Setup
-
-LoRA is applied to selected attention projections instead of updating the full model.
-
-This keeps the number of trainable parameters small while preserving most of the pretrained model weights.
-
-The finetuning workflow is:
-
-1. initialize LoRA model
-2. load pretrained weights into base layers
-3. freeze base parameters
-4. train only LoRA parameters
-5. compare generations before and after finetuning
+```
+model_finetuned.pth
+```
 
 ---
 
-## Finetuning Data Format
+## 🔧 LoRA Setup
 
-The finetuning dataset is structured as prompt/response text separated by:
+LoRA replaces weight updates with:
 
-    :ANSWER:
+\[
+W = W_{base} + \frac{\alpha}{r} A B
+\]
 
-During finetuning, loss is masked so that optimization is applied only to the response portion, not the prompt.
+- Base weights are frozen
+- Only low-rank matrices \(A, B\) are trained
+- Applied to:
+  - Attention projections
+  - Expert MLP layers
 
-This makes the setup closer to supervised instruction tuning.
-
----
-
-## Setup
-
-Install dependencies:
-
-    pip install torch matplotlib
-
----
-
-## Pretrain the Base Model
-
-    python train.py
-
-This will:
-- train the base model on Tiny Shakespeare
-- save `model_pretrained.pth`
-- show training loss and learning-rate plots
+Benefits:
+- Fewer trainable parameters
+- Faster training
+- Lower memory usage
 
 ---
 
-## Finetune with LoRA
+## 📊 Finetuning Objective
 
-    python train_finetuning.py
+Dataset format:
+```
+<question>:ANSWER:<answer>:END:
+```
 
-This will:
-- load `model_pretrained.pth`
-- finetune only the LoRA parameters
-- save `model_finetuned.pth`
-- show finetuning loss and learning-rate plots
+During training:
+- Loss is computed **only on answer tokens**
+- Prompt tokens are masked out
 
----
-
-## Sample from Both Models
-
-    python sample.py
-
-This script:
-- loads the pretrained model
-- loads the LoRA-finetuned model
-- generates text from the same prompt
-- prints both outputs for direct comparison
-
-By default the prompt is:
-
-    What is love?:ANSWER:
+This mimics instruction tuning used in modern LLMs.
 
 ---
 
-## Implemented Concepts
+## 🧪 Sample Outputs
 
-### Pretraining
-The repository includes a full language-model pretraining stage before finetuning.
+### Prompt: Tell me who Caius Marcius is.
 
-### LoRA
-Finetuning is done by adding low-rank trainable adapters while freezing the pretrained base model.
+**Pretrained Model**
+```
+Tell me who Caius Marcius is.:ANSWER:
+Then see here from as the childrens of birth,
+And these hand so our lawful times of my sweet,
+And s
+```
 
-### Parameter-Efficient Finetuning
-Only a small subset of parameters is updated during finetuning, reducing memory and compute requirements.
-
-### Loss Masking
-The finetuning loader masks the prompt tokens so that only the answer tokens contribute to the training loss.
-
-### Latent Attention
-The architecture uses a latent key/value pathway for memory-efficient attention.
-
-### RoPE / NoPE Split
-Rotary position embeddings are applied only to part of the attention representation, while the remaining dimensions are left unrotated.
-
-### Mixture-of-Experts
-The pretrained model includes sparse expert routing with top-k expert selection.
+**Finetuned Model**
+```
+Tell me who Caius Marcius is.:ANSWER:Caius Marcius is a Roman warrior.:END:
+```
 
 ---
 
-## Training Dynamics
+### Prompt: Why is pride dangerous?
+
+**Pretrained Model**
+```
+Why is pride dangerous?:ANSWER:
+Go his old the wilt of this bewing of heaven,
+Both our promised it hath substitute will bestand:
+Wh
+```
+
+**Finetuned Model**
+```
+Why is pride dangerous?:ANSWER:Pride may courage honour in the hearts of men.:END:
+```
+
+---
+
+### Prompt: What is loyalty?
+
+**Pretrained Model**
+```
+What is loyalty?:ANSWER:
+We know help to assent worth the best have lady.
+```
+
+**Finetuned Model**
+```
+What is loyalty?:ANSWER:Mercy is gentle pity shown to another.:END:
+```
+
+---
+
+### Prompt: Why does Coriolanus succeed in war but struggle in peace?
+
+**Finetuned Model**
+```
+Why does Coriolanus succeed in war but struggle in peace?:ANSWER:They clash fear his pride anger and enters the people.:END:
+```
+
+---
+
+## 📈 Training Dynamics
 
 <p align="center">
   <img src="docs/finetune_training_loss.png" width="45%" />
@@ -177,17 +201,80 @@ The pretrained model includes sparse expert routing with top-k expert selection.
 
 ---
 
-## Notes
+## 📌 Observations
 
-- Run `python train.py` before `python train_finetuning.py`
-- Run finetuning before `python sample.py` if you want pretrained vs finetuned comparison
-- This repository is focused on understanding the mechanics of modern LLM finetuning from first principles
+### What works
+- Learns structured Q&A format
+- Strong performance on seen and similar prompts
+- Successfully shifts from Shakespeare-style generation → QA behavior
+
+### Limitations
+- Weak reasoning on complex questions
+- Errors on abstract concepts
+- Sensitive to prompt phrasing
+- Short-answer bias
 
 ---
 
-## Future Improvements
+## 💡 Key Insights
 
-- Add training plots and sample outputs to the README
-- Add parameter count comparison between full finetuning and LoRA finetuning
-- Add support for multiple finetuning prompts and evaluation examples
-- Extend to token-level or subword tokenization
+- The model **becomes the dataset**
+- LoRA enables fast behavioral adaptation
+- Data quality matters more than training duration
+
+---
+
+## 🛠️ Setup
+
+Install dependencies:
+```bash
+pip install torch matplotlib
+```
+
+---
+
+## ▶️ Run Everything
+
+Pretrain:
+```bash
+python train.py
+```
+
+Finetune:
+```bash
+python train_finetuning.py
+```
+
+Sample:
+```bash
+python sample.py
+```
+
+---
+
+## 🔮 Future Improvements
+
+- Larger and more diverse instruction dataset
+- Conversational fine-tuning (chat-style)
+- Apply LoRA to more components
+- Add evaluation benchmarks
+- Switch to subword tokenization
+
+---
+
+## ⭐ Why This Project
+
+This project demonstrates:
+- Deep understanding of Transformer internals
+- Practical implementation of LoRA
+- End-to-end LLM training pipeline
+- Real behavior shift from pretraining → finetuning
+
+---
+
+## 📬 Contact
+
+Open to discussions on:
+- AI / LLM engineering roles
+- Research collaborations
+- System design for large-scale models
